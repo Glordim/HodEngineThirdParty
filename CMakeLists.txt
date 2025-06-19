@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(HodEngineThirdParty)
 
+set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "" FORCE)
+set(CMAKE_INSTALL_LIBDIR "lib" CACHE PATH "" FORCE)
+set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "" FORCE)
+
 set(BOX2D_SAMPLES OFF CACHE BOOL "" FORCE)
 set(BOX2D_VALIDATE OFF CACHE BOOL "" FORCE)
 set(BOX2D_UNIT_TESTS OFF CACHE BOOL "" FORCE)
@@ -19,3 +23,8 @@ if(ANDROID)
 endif()
 
 add_subdirectory(Source/Box2d)
+#PROJECT_IS_TOP_LEVEL in Box2d'CMakeLists block include copy
+install( 
+	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/Box2d/include/box2d"
+	DESTINATION include
+)

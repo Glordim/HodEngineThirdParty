@@ -16,7 +16,6 @@ typedef struct b2Hull b2Hull;
  * @brief Geometry types and algorithms
  *
  * Definitions of circles, capsules, segments, and polygons. Various algorithms to compute hulls, mass properties, and so on.
- * Functions should take the shape as the first argument to assist editor auto-complete.
  * @{
  */
 
@@ -37,39 +36,28 @@ typedef struct b2RayCastInput
 	float maxFraction;
 } b2RayCastInput;
 
-/// A distance proxy is used by the GJK algorithm. It encapsulates any shape.
-/// You can provide between 1 and B2_MAX_POLYGON_VERTICES and a radius.
-typedef struct b2ShapeProxy
-{
-	/// The point cloud
-	b2Vec2 points[B2_MAX_POLYGON_VERTICES];
-
-	/// The number of points. Must be greater than 0.
-	int count;
-
-	/// The external radius of the point cloud. May be zero.
-	float radius;
-} b2ShapeProxy;
-
 /// Low level shape cast input in generic form. This allows casting an arbitrary point
 /// cloud wrap with a radius. For example, a circle is a single point with a non-zero radius.
 /// A capsule is two points with a non-zero radius. A box is four points with a zero radius.
 typedef struct b2ShapeCastInput
 {
-	/// A generic shape
-	b2ShapeProxy proxy;
+	/// A point cloud to cast
+	b2Vec2 points[B2_MAX_POLYGON_VERTICES];
+
+	/// The number of points
+	int count;
+
+	/// The radius around the point cloud
+	float radius;
 
 	/// The translation of the shape cast
 	b2Vec2 translation;
 
 	/// The maximum fraction of the translation to consider, typically 1
 	float maxFraction;
-
-	/// Allow shape cast to encroach when initially touching. This only works if the radius is greater than zero.
-	bool canEncroach;
 } b2ShapeCastInput;
 
-/// Low level ray cast or shape-cast output data. Returns a zero fraction and normal in the case of initial overlap.
+/// Low level ray cast or shape-cast output data
 typedef struct b2CastOutput
 {
 	/// The surface normal at the hit point
@@ -247,38 +235,38 @@ B2_API b2AABB b2ComputePolygonAABB( const b2Polygon* shape, b2Transform transfor
 B2_API b2AABB b2ComputeSegmentAABB( const b2Segment* shape, b2Transform transform );
 
 /// Test a point for overlap with a circle in local space
-B2_API bool b2PointInCircle( const b2Circle* shape, b2Vec2 point );
+B2_API bool b2PointInCircle( b2Vec2 point, const b2Circle* shape );
 
 /// Test a point for overlap with a capsule in local space
-B2_API bool b2PointInCapsule( const b2Capsule* shape, b2Vec2 point );
+B2_API bool b2PointInCapsule( b2Vec2 point, const b2Capsule* shape );
 
 /// Test a point for overlap with a convex polygon in local space
-B2_API bool b2PointInPolygon( const b2Polygon* shape, b2Vec2 point );
+B2_API bool b2PointInPolygon( b2Vec2 point, const b2Polygon* shape );
 
-/// Ray cast versus circle shape in local space.
-B2_API b2CastOutput b2RayCastCircle( const b2Circle* shape, const b2RayCastInput* input );
+/// Ray cast versus circle shape in local space. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2RayCastCircle( const b2RayCastInput* input, const b2Circle* shape );
 
-/// Ray cast versus capsule shape in local space.
-B2_API b2CastOutput b2RayCastCapsule( const b2Capsule* shape, const b2RayCastInput* input );
+/// Ray cast versus capsule shape in local space. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2RayCastCapsule( const b2RayCastInput* input, const b2Capsule* shape );
 
 /// Ray cast versus segment shape in local space. Optionally treat the segment as one-sided with hits from
 /// the left side being treated as a miss.
-B2_API b2CastOutput b2RayCastSegment( const b2Segment* shape, const b2RayCastInput* input, bool oneSided );
+B2_API b2CastOutput b2RayCastSegment( const b2RayCastInput* input, const b2Segment* shape, bool oneSided );
 
-/// Ray cast versus polygon shape in local space.
-B2_API b2CastOutput b2RayCastPolygon( const b2Polygon* shape, const b2RayCastInput* input );
+/// Ray cast versus polygon shape in local space. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2RayCastPolygon( const b2RayCastInput* input, const b2Polygon* shape );
 
-/// Shape cast versus a circle.
-B2_API b2CastOutput b2ShapeCastCircle(const b2Circle* shape,  const b2ShapeCastInput* input );
+/// Shape cast versus a circle. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2ShapeCastCircle( const b2ShapeCastInput* input, const b2Circle* shape );
 
-/// Shape cast versus a capsule.
-B2_API b2CastOutput b2ShapeCastCapsule( const b2Capsule* shape, const b2ShapeCastInput* input);
+/// Shape cast versus a capsule. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2ShapeCastCapsule( const b2ShapeCastInput* input, const b2Capsule* shape );
 
-/// Shape cast versus a line segment.
-B2_API b2CastOutput b2ShapeCastSegment( const b2Segment* shape, const b2ShapeCastInput* input );
+/// Shape cast versus a line segment. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2ShapeCastSegment( const b2ShapeCastInput* input, const b2Segment* shape );
 
-/// Shape cast versus a convex polygon.
-B2_API b2CastOutput b2ShapeCastPolygon( const b2Polygon* shape, const b2ShapeCastInput* input );
+/// Shape cast versus a convex polygon. Initial overlap is treated as a miss.
+B2_API b2CastOutput b2ShapeCastPolygon( const b2ShapeCastInput* input, const b2Polygon* shape );
 
 /// A convex hull. Used to create convex polygons.
 /// @warning Do not modify these values directly, instead use b2ComputeHull()
@@ -341,6 +329,19 @@ typedef struct b2SegmentDistanceResult
 /// Compute the distance between two line segments, clamping at the end points if needed.
 B2_API b2SegmentDistanceResult b2SegmentDistance( b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec2 q2 );
 
+/// A distance proxy is used by the GJK algorithm. It encapsulates any shape.
+typedef struct b2ShapeProxy
+{
+	/// The point cloud
+	b2Vec2 points[B2_MAX_POLYGON_VERTICES];
+
+	/// The number of points
+	int count;
+
+	/// The external radius of the point cloud
+	float radius;
+} b2ShapeProxy;
+
 /// Used to warm start the GJK simplex. If you call this function multiple times with nearby
 /// transforms this might improve performance. Otherwise you can zero initialize this.
 /// The distance cache must be initialized to zero on the first call.
@@ -381,10 +382,11 @@ typedef struct b2DistanceInput
 /// Output for b2ShapeDistance
 typedef struct b2DistanceOutput
 {
-	b2Vec2 pointA;	  ///< Closest point on shapeA
-	b2Vec2 pointB;	  ///< Closest point on shapeB
-	b2Vec2 normal;	  ///< Normal vector that points from A to B. Invalid if distance is zero.
-	float distance;	  ///< The final distance, zero if overlapped
+	b2Vec2 pointA; ///< Closest point on shapeA
+	b2Vec2 pointB; ///< Closest point on shapeB
+	// todo_erin implement this
+	// b2Vec2 normal;			///< Normal vector that points from A to B
+	float distance;		  ///< The final distance, zero if overlapped
 	int iterations;	  ///< Number of GJK iterations used
 	int simplexCount; ///< The number of simplexes stored in the simplex array
 } b2DistanceOutput;
@@ -392,10 +394,10 @@ typedef struct b2DistanceOutput
 /// Simplex vertex for debugging the GJK algorithm
 typedef struct b2SimplexVertex
 {
-	b2Vec2 wA;	///< support point in proxyA
-	b2Vec2 wB;	///< support point in proxyB
-	b2Vec2 w;	///< wB - wA
-	float a;	///< barycentric coordinate for closest point
+	b2Vec2 wA;		///< support point in proxyA
+	b2Vec2 wB;		///< support point in proxyB
+	b2Vec2 w;		///< wB - wA
+	float a;		///< barycentric coordinate for closest point
 	int indexA; ///< wA index
 	int indexB; ///< wB index
 } b2SimplexVertex;
@@ -404,13 +406,13 @@ typedef struct b2SimplexVertex
 typedef struct b2Simplex
 {
 	b2SimplexVertex v1, v2, v3; ///< vertices
-	int count;					///< number of valid vertices
+	int count;				///< number of valid vertices
 } b2Simplex;
 
 /// Compute the closest points between two shapes represented as point clouds.
 /// b2SimplexCache cache is input/output. On the first call set b2SimplexCache.count to zero.
 /// The underlying GJK algorithm may be debugged by passing in debug simplexes and capacity. You may pass in NULL and 0 for these.
-B2_API b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* cache, b2Simplex* simplexes,
+B2_API b2DistanceOutput b2ShapeDistance( b2SimplexCache* cache, const b2DistanceInput* input, b2Simplex* simplexes,
 										 int simplexCapacity );
 
 /// Input parameters for b2ShapeCast
@@ -422,18 +424,13 @@ typedef struct b2ShapeCastPairInput
 	b2Transform transformB; ///< The world transform for shape B
 	b2Vec2 translationB;	///< The translation of shape B
 	float maxFraction;		///< The fraction of the translation to consider, typically 1
-	bool canEncroach;		///< Allows shapes with a radius to move slightly closer if already touching
 } b2ShapeCastPairInput;
 
 /// Perform a linear shape cast of shape B moving and shape A fixed. Determines the hit point, normal, and translation fraction.
-/// Initially touching shapes are treated as a miss.
 B2_API b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input );
 
-/// Make a proxy for use in overlap, shape cast, and related functions. This is a deep copy of the points.
-B2_API b2ShapeProxy b2MakeProxy( const b2Vec2* points, int count, float radius );
-
-/// Make a proxy with a transform. This is a deep copy of the points.
-B2_API b2ShapeProxy b2MakeOffsetProxy( const b2Vec2* points, int count, float radius, b2Vec2 position, b2Rot rotation );
+/// Make a proxy for use in GJK and related functions.
+B2_API b2ShapeProxy b2MakeProxy( const b2Vec2* vertices, int count, float radius );
 
 /// This describes the motion of a body/shape for TOI computation. Shapes are defined with respect to the body origin,
 /// which may not coincide with the center of mass. However, to support dynamics we must interpolate the center of mass
@@ -450,7 +447,7 @@ typedef struct b2Sweep
 /// Evaluate the transform sweep at a specific time.
 B2_API b2Transform b2GetSweepTransform( const b2Sweep* sweep, float time );
 
-/// Time of impact input
+/// Input parameters for b2TimeOfImpact
 typedef struct b2TOIInput
 {
 	b2ShapeProxy proxyA; ///< The proxy for shape A
@@ -470,20 +467,11 @@ typedef enum b2TOIState
 	b2_toiStateSeparated
 } b2TOIState;
 
-/// Time of impact output
+/// Output parameters for b2TimeOfImpact.
 typedef struct b2TOIOutput
 {
-	/// The type of result
-	b2TOIState state;
-
-	/// The hit point
-	b2Vec2 point;
-
-	/// The hit normal
-	b2Vec2 normal;
-
-	/// The sweep time of the collision 
-	float fraction;
+	b2TOIState state; ///< The type of result
+	float fraction;	  ///< The sweep time of the collision
 } b2TOIOutput;
 
 /// Compute the upper bound on time before two shapes penetrate. Time is represented as
@@ -503,7 +491,7 @@ B2_API b2TOIOutput b2TimeOfImpact( const b2TOIInput* input );
 /// A manifold point is a contact point belonging to a contact manifold.
 /// It holds details related to the geometry and dynamics of the contact points.
 /// Box2D uses speculative collision so some contact points may be separated.
-/// You may use the totalNormalImpulse to determine if there was an interaction during
+/// You may use the maxNormalImpulse to determine if there was an interaction during
 /// the time step.
 typedef struct b2ManifoldPoint
 {
@@ -528,9 +516,9 @@ typedef struct b2ManifoldPoint
 	/// The friction impulse
 	float tangentImpulse;
 
-	/// The total normal impulse applied across sub-stepping and restitution. This is important
+	/// The maximum normal impulse applied during sub-stepping. This is important
 	/// to identify speculative contact points that had an interaction in the time step.
-	float totalNormalImpulse;
+	float maxNormalImpulse;
 
 	/// Relative normal velocity pre-solve. Used for hit events. If the normal impulse is
 	/// zero then there was no hit. Negative means shapes are approaching.
@@ -681,7 +669,7 @@ B2_API b2DynamicTree b2DynamicTree_Create( void );
 B2_API void b2DynamicTree_Destroy( b2DynamicTree* tree );
 
 /// Create a proxy. Provide an AABB and a userData value.
-B2_API int b2DynamicTree_CreateProxy( b2DynamicTree* tree, b2AABB aabb, uint64_t categoryBits, uint64_t userData );
+B2_API int b2DynamicTree_CreateProxy( b2DynamicTree* tree, b2AABB aabb, uint64_t categoryBits, int userData );
 
 /// Destroy a proxy. This asserts if the id is invalid.
 B2_API void b2DynamicTree_DestroyProxy( b2DynamicTree* tree, int proxyId );
@@ -692,15 +680,9 @@ B2_API void b2DynamicTree_MoveProxy( b2DynamicTree* tree, int proxyId, b2AABB aa
 /// Enlarge a proxy and enlarge ancestors as necessary.
 B2_API void b2DynamicTree_EnlargeProxy( b2DynamicTree* tree, int proxyId, b2AABB aabb );
 
-/// Modify the category bits on a proxy. This is an expensive operation.
-B2_API void b2DynamicTree_SetCategoryBits( b2DynamicTree* tree, int proxyId, uint64_t categoryBits );
-
-/// Get the category bits on a proxy.
-B2_API uint64_t b2DynamicTree_GetCategoryBits( b2DynamicTree* tree, int proxyId );
-
 /// This function receives proxies found in the AABB query.
 /// @return true if the query should continue
-typedef bool b2TreeQueryCallbackFcn( int proxyId, uint64_t userData, void* context );
+typedef bool b2TreeQueryCallbackFcn( int proxyId, int userData, void* context );
 
 /// Query an AABB for overlapping proxies. The callback class is called for each proxy that overlaps the supplied AABB.
 ///	@return performance data
@@ -712,7 +694,7 @@ B2_API b2TreeStats b2DynamicTree_Query( const b2DynamicTree* tree, b2AABB aabb, 
 /// - return a value of 0 to terminate the ray cast
 /// - return a value less than input->maxFraction to clip the ray
 /// - return a value of input->maxFraction to continue the ray cast without clipping
-typedef float b2TreeRayCastCallbackFcn( const b2RayCastInput* input, int proxyId, uint64_t userData, void* context );
+typedef float b2TreeRayCastCallbackFcn( const b2RayCastInput* input, int proxyId, int userData, void* context );
 
 /// Ray cast against the proxies in the tree. This relies on the callback
 /// to perform a exact ray cast in the case were the proxy contains a shape.
@@ -735,7 +717,7 @@ B2_API b2TreeStats b2DynamicTree_RayCast( const b2DynamicTree* tree, const b2Ray
 /// - return a value of 0 to terminate the ray cast
 /// - return a value less than input->maxFraction to clip the ray
 /// - return a value of input->maxFraction to continue the ray cast without clipping
-typedef float b2TreeShapeCastCallbackFcn( const b2ShapeCastInput* input, int proxyId, uint64_t userData, void* context );
+typedef float b2TreeShapeCastCallbackFcn( const b2ShapeCastInput* input, int proxyId, int userData, void* context );
 
 /// Ray cast against the proxies in the tree. This relies on the callback
 /// to perform a exact ray cast in the case were the proxy contains a shape.
@@ -757,9 +739,6 @@ B2_API int b2DynamicTree_GetHeight( const b2DynamicTree* tree );
 /// Get the ratio of the sum of the node areas to the root area.
 B2_API float b2DynamicTree_GetAreaRatio( const b2DynamicTree* tree );
 
-/// Get the bounding box that contains the entire tree
-B2_API b2AABB b2DynamicTree_GetRootBounds( const b2DynamicTree* tree );
-
 /// Get the number of proxies created
 B2_API int b2DynamicTree_GetProxyCount( const b2DynamicTree* tree );
 
@@ -770,7 +749,7 @@ B2_API int b2DynamicTree_Rebuild( b2DynamicTree* tree, bool fullBuild );
 B2_API int b2DynamicTree_GetByteCount( const b2DynamicTree* tree );
 
 /// Get proxy user data
-B2_API uint64_t b2DynamicTree_GetUserData( const b2DynamicTree* tree, int proxyId );
+B2_API int b2DynamicTree_GetUserData( const b2DynamicTree* tree, int proxyId );
 
 /// Get the AABB of a proxy
 B2_API b2AABB b2DynamicTree_GetAABB( const b2DynamicTree* tree, int proxyId );
@@ -781,63 +760,6 @@ B2_API void b2DynamicTree_Validate( const b2DynamicTree* tree );
 /// Validate this tree has no enlarged AABBs. For testing.
 B2_API void b2DynamicTree_ValidateNoEnlarged( const b2DynamicTree* tree );
 
-/**@}*/
 
-/**
- * @defgroup character Character mover
- * Character movement solver
- * @{
- */
-
-/// These are the collision planes returned from b2World_CollideMover
-typedef struct b2PlaneResult
-{
-	/// The collision plane between the mover and a convex shape
-	b2Plane plane;
-
-	// The collision point on the shape.
-	b2Vec2 point;
-
-	/// Did the collision register a hit? If not this plane should be ignored.
-	bool hit;
-} b2PlaneResult;
-
-/// These are collision planes that can be fed to b2SolvePlanes. Normally
-/// this is assembled by the user from plane results in b2PlaneResult
-typedef struct b2CollisionPlane
-{
-	/// The collision plane between the mover and some shape
-	b2Plane plane;
-
-	/// Setting this to FLT_MAX makes the plane as rigid as possible. Lower values can
-	/// make the plane collision soft. Usually in meters.
-	float pushLimit;
-
-	/// The push on the mover determined by b2SolvePlanes. Usually in meters.
-	float push;
-
-	/// Indicates if b2ClipVector should clip against this plane. Should be false for soft collision.
-	bool clipVelocity;
-} b2CollisionPlane;
-
-/// Result returned by b2SolvePlanes
-typedef struct b2PlaneSolverResult
-{
-	/// The translation of the mover
-	b2Vec2 translation;
-
-	/// The number of iterations used by the plane solver. For diagnostics.
-	int iterationCount;
-} b2PlaneSolverResult;
-
-/// Solves the position of a mover that satisfies the given collision planes.
-/// @param targetDelta the desired movement from the position used to generate the collision planes
-/// @param planes the collision planes
-/// @param count the number of collision planes
-B2_API b2PlaneSolverResult b2SolvePlanes( b2Vec2 targetDelta, b2CollisionPlane* planes, int count );
-
-/// Clips the velocity against the given collision planes. Planes with zero push or clipVelocity
-/// set to false are skipped.
-B2_API b2Vec2 b2ClipVector( b2Vec2 vector, const b2CollisionPlane* planes, int count );
 
 /**@}*/
