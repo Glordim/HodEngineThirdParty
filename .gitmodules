@@ -1,3 +1,12 @@
 [submodule "Source/Box2d"]
 	path = Source/Box2d
 	url = https://github.com/erincatto/box2d.git
+[submodule "Source/Freetype"]
+	path = Source/Freetype
+	url = https://github.com/freetype/freetype.git
+[submodule "Source/glslang"]
+	path = Source/glslang
+	url = https://github.com/KhronosGroup/glslang.git
+[submodule "Source/SPIRV-Cross"]
+	path = Source/SPIRV-Cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git
