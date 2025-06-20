@@ -1,4 +1,4 @@
-prefix=D:/Perso/Dev/HodEngineThirdParty/Install/Win_x64
+prefix=E:/HodEngineThirdParty/Install/Win_x64
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include
