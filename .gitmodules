@@ -10,3 +10,12 @@
 [submodule "Source/SPIRV-Cross"]
 	path = Source/SPIRV-Cross
 	url = https://github.com/KhronosGroup/SPIRV-Cross.git
+[submodule "Source/Stb"]
+	path = Source/Stb
+	url = https://github.com/nothings/stb.git
+[submodule "Source/VulkanMemoryAllocator"]
+	path = Source/VulkanMemoryAllocator
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git
+[submodule "Source/PortableFileDialogs"]
+	path = Source/PortableFileDialogs
+	url = https://github.com/samhocevar/portable-file-dialogs.git
