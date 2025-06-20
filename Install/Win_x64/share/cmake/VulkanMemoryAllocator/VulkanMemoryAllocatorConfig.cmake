@@ -59,7 +59,7 @@ endif()
 add_library(GPUOpen::VulkanMemoryAllocator INTERFACE IMPORTED)
 
 set_target_properties(GPUOpen::VulkanMemoryAllocator PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/VulkanMemoryAllocator"
 )
 
 # Load information for each installed configuration.

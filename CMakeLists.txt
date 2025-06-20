@@ -61,6 +61,7 @@ add_subdirectory(Source/SPIRV-Cross)
 # VulkanMemoryAllocator
 set(VMA_ENABLE_INSTALL ON CACHE BOOL "" FORCE)
 set(VMA_BUILD_DOCUMENTATION OFF CACHE BOOL "" FORCE)
+set(CMAKE_INSTALL_INCLUDEDIR "include/VulkanMemoryAllocator" CACHE PATH "" FORCE)
 add_subdirectory(Source/VulkanMemoryAllocator)
 
 # Stb
@@ -74,7 +75,7 @@ install(
 # PortableFileDialogs
 install(
 	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/PortableFileDialogs"
-	DESTINATION include/PortableFileDialogs
+	DESTINATION include
 	FILES_MATCHING
 	PATTERN "*.h"
 )
