@@ -19,3 +19,6 @@
 [submodule "Source/PortableFileDialogs"]
 	path = Source/PortableFileDialogs
 	url = https://github.com/samhocevar/portable-file-dialogs.git
+[submodule "Source/Slang"]
+	path = Source/Slang
+	url = https://github.com/shader-slang/slang.git
