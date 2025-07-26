@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 
 project(HodEngineThirdParty)
 
+include(ExternalProject)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "" FORCE)
 
 if(APPLE)
@@ -87,3 +89,38 @@ install(
 	FILES_MATCHING
 	PATTERN "*.h"
 )
+
+if (APPLE)
+	ExternalProject_Add(
+		MetalCpp
+		URL https://developer.apple.com/metal/cpp/files/metal-cpp_macOS15.2_iOS18.2.zip
+		CONFIGURE_COMMAND ""
+		BUILD_COMMAND ""
+		INSTALL_COMMAND ""
+		SOURCE_DIR ${CMAKE_BINARY_DIR}/metal-cpp-src
+	)
+
+	ExternalProject_Get_Property(MetalCpp SOURCE_DIR)
+	message(STATUS "MetalCpp: ${SOURCE_DIR}")
+
+	install(
+		DIRECTORY ${SOURCE_DIR}/Metal
+		DESTINATION include
+		FILES_MATCHING
+		PATTERN "*.hpp"
+	)
+
+	install(
+		DIRECTORY ${SOURCE_DIR}/Foundation
+		DESTINATION include
+		FILES_MATCHING
+		PATTERN "*.hpp"
+	)
+
+	install(
+		DIRECTORY ${SOURCE_DIR}/QuartzCore
+		DESTINATION include
+		FILES_MATCHING
+		PATTERN "*.hpp"
+	)
+endif()
