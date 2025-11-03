@@ -124,3 +124,7 @@ if (APPLE)
 		PATTERN "*.hpp"
 	)
 endif()
+
+# Gtest
+set(CMAKE_INSTALL_INCLUDEDIR "include/Gtest" CACHE PATH "" FORCE)
+add_subdirectory(Source/Gtest)
