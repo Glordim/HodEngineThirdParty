@@ -7,7 +7,7 @@ if(CMAKE_VERSION VERSION_LESS "2.8.3")
    message(FATAL_ERROR "CMake >= 2.8.3 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.8.3...3.29)
+cmake_policy(VERSION 2.8.3...3.31)
 #----------------------------------------------------------------
 # Generated CMake target import file.
 #----------------------------------------------------------------
@@ -59,7 +59,6 @@ endif()
 add_library(box2d::box2d STATIC IMPORTED)
 
 set_target_properties(box2d::box2d PROPERTIES
-  INTERFACE_COMPILE_DEFINITIONS "\$<\$<CONFIG:RELWITHDEBINFO>:B2_ENABLE_ASSERT>"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
 )
 
