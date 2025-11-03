@@ -22,3 +22,6 @@
 [submodule "Source/Slang"]
 	path = Source/Slang
 	url = https://github.com/shader-slang/slang.git
+[submodule "Source/Gtest"]
+	path = Source/Gtest
+	url = https://github.com/google/googletest.git
