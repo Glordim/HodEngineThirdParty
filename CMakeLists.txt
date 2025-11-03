@@ -126,5 +126,6 @@ if (APPLE)
 endif()
 
 # Gtest
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(CMAKE_INSTALL_INCLUDEDIR "include/Gtest" CACHE PATH "" FORCE)
 add_subdirectory(Source/Gtest)
