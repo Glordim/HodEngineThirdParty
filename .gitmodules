@@ -25,3 +25,6 @@
 [submodule "Source/Gtest"]
 	path = Source/Gtest
 	url = https://github.com/google/googletest.git
+[submodule "Source/WindowsHModular"]
+	path = Source/WindowsHModular
+	url = https://github.com/Leandros/WindowsHModular.git

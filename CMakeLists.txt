@@ -82,6 +82,14 @@ install(
 	PATTERN "*.h"
 )
 
+# WindowsHModular
+install(
+	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/WindowsHModular/include/win32"
+	DESTINATION include
+	FILES_MATCHING
+	PATTERN "*.h"
+)
+
 # PortableFileDialogs
 install(
 	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/PortableFileDialogs"
