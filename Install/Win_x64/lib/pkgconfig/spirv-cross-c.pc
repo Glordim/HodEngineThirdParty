@@ -8,7 +8,7 @@ includedir=${prefix}/include/spirv_cross
 
 Name: spirv-cross-c
 Description: C API for SPIRV-Cross (static)
-Version: 0.58.0
+Version: 0.67.0
 
 Requires:
 Libs: -L${libdir} -lspirv-cross-c
