@@ -28,3 +28,6 @@
 [submodule "Source/WindowsHModular"]
 	path = Source/WindowsHModular
 	url = https://github.com/Leandros/WindowsHModular.git
+[submodule "Source/Fmt"]
+	path = Source/Fmt
+	url = https://github.com/fmtlib/fmt.git
