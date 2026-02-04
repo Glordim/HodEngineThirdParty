@@ -144,6 +144,43 @@ struct MyType<T, U>
 }
 ```
 
+Optional conformances can be expressed compactly using the `where optional` syntax:
+```csharp
+// Together, these two overloads...
+int myGenericMethod<T>(T arg)
+{
+}
+
+int myGenericMethod<T>(T arg) where T: IFoo
+{
+    arg.myMethod(1.0);
+}
+
+// ... are equivalent to:
+int myGenericMethod<T>(T arg) where optional T: IFoo
+{
+    if (T is IFoo)
+    {
+        arg.myMethod(1.0); // OK in a block that checks for T: IFoo conformance.
+    }
+}
+```
+
+### Using Generic Parameters in Attributes
+
+Slang allows referencing generic parameters in bracket attributes. This is particularly useful for shader entry points where you want to control attributes like workgroup sizes at compile time.
+
+For example:
+```csharp
+[numthreads(blockSize, blockSize, 1)]
+void computeMain<int blockSize>() 
+{
+    // Shader implementation
+}
+```
+
+In this example, the generic parameter `blockSize` is used in the `numthreads` attribute. This allows the host application to control the workgroup size by compiling a specialization of the entry point with a specific value for `blockSize`, instead of by resorting to preprocessor macros.
+
 Supported Constructs in Interface Definitions
 -----------------------------------------------------
 
@@ -156,8 +193,25 @@ interface IFoo
 {
     property int count {get; set;}
 }
+
+struct MyObject : IFoo
+{
+    int myCount = 0;
+    property int count
+    {
+        get { return myCount; }
+        set { myCount = newValue; } 
+    }
+}
 ```
-The above listing declares that any conforming type must define a property named `count` with both a `getter` and a `setter` method.
+The above listing declares that any conforming type must define a property named `count` with both a `getter` and a `setter` method. You can then access the concrete value stored in the property as you would normally. 
+
+```csharp
+MyObject obj;
+obj.count = 2; 
+
+int count2 = obj.count; // count2 =  2
+```
 
 ### Generic Methods
 
@@ -830,7 +884,7 @@ void main()
 }
 
 ```
-See  [if-let syntax](03-convenience-features.html#if_let-syntax) for more details.
+See  [if-let syntax](03-convenience-features.md#if_let-syntax) for more details.
 
 
 Generic Interfaces
@@ -1004,12 +1058,12 @@ void printNumbers<each T>(expand each T args) where T == int
 void compute<each T>(expand each T args) where T == int
 {
     // Maps every element in `args` to `elementValue + 1`, and forwards the
-    // new values as arguments to `printNumber`.
-    printNumber(expand (each args) + 1);
+    // new values as arguments to `printNumbers`.
+    printNumbers(expand (each args) + 1);
 
     // The above statement is equivalent to:
     // ```
-    // printNumber(args[0] + 1, args[1] + 1, ..., args[n-1] + 1);
+    // printNumbers(args[0] + 1, args[1] + 1, ..., args[n-1] + 1);
     // ```
 }
 void test()
