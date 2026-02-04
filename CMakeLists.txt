@@ -80,6 +80,11 @@ set(SLANG_SLANG_LLVM_FLAVOR DISABLE CACHE BOOL "" FORCE)
 set(CMAKE_INSTALL_INCLUDEDIR "include/Slang" CACHE PATH "" FORCE)
 add_subdirectory(Source/Slang)
 
+# Fmt
+set(FMT_INSTALL ON CACHE BOOL "" FORCE)
+set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "" FORCE)
+add_subdirectory(Source/Fmt)
+
 # Stb
 install(
 	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/Stb/"
