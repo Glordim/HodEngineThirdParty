@@ -27,6 +27,7 @@ slangc -help-style markdown -h
 * [line-directive-mode](#line-directive-mode)
 * [debug-info-format](#debug-info-format)
 * [fp-mode](#fp-mode)
+* [fp-denormal-mode](#fp-denormal-mode)
 * [help-style](#help-style)
 * [optimization-level](#optimization-level)
 * [debug-level](#debug-level)
@@ -37,6 +38,7 @@ slangc -help-style markdown -h
 * [vulkan-shift](#vulkan-shift)
 * [capability](#capability)
 * [file-extension](#file-extension)
+* [help-category](#help-category)
 
 <a id="General"></a>
 ## General
@@ -93,7 +95,7 @@ Emit IR typically as a '.slang-module' when outputting to a container.
 <a id="h"></a>
 ### -h, -help, --help
 
-**-h or -h &lt;help-category&gt;**
+**-h or -h &lt;[help-category](#help-category)&gt;**
 
 Print this message, or help in specified category. 
 
@@ -288,6 +290,11 @@ Reports the time spent in the downstream compiler.
 Reports compiler performance benchmark results. 
 
 
+<a id="report-detailed-perf-benchmark"></a>
+### -report-detailed-perf-benchmark
+Reports compiler performance benchmark results for each intermediate pass (implies [-report-perf-benchmark](#report-perf-benchmark)). 
+
+
 <a id="report-checkpoint-intermediates"></a>
 ### -report-checkpoint-intermediates
 Reports information about checkpoint contexts used for reverse-mode automatic differentiation. 
@@ -354,9 +361,14 @@ Include additional type conformance during linking for dynamic dispatch.
 <a id="reflection-json"></a>
 ### -reflection-json
 
-**reflection-json &lt;path&gt;**
+**-reflection-json &lt;path&gt;**
 
 Emit reflection data in JSON format to a file. 
+
+
+<a id="msvc-style-bitfield-packing"></a>
+### -msvc-style-bitfield-packing
+Pack bitfields according to MSVC rules (msb first, new field when underlying type size changes) rather than gcc-style (lsb first) 
 
 
 
@@ -394,6 +406,30 @@ Disables generics and specialization pass.
 **-fp-mode &lt;[fp-mode](#fp-mode)&gt;, -floating-point-mode &lt;[fp-mode](#fp-mode)&gt;**
 
 Control floating point optimizations 
+
+
+<a id="denorm-mode-fp16"></a>
+### -denorm-mode-fp16
+
+**-denorm-mode-fp16 &lt;[fp-denormal-mode](#fp-denormal-mode)&gt;**
+
+Control handling of 16-bit denormal floating point values in SPIR-V (any, preserve, ftz) 
+
+
+<a id="denorm-mode-fp32"></a>
+### -denorm-mode-fp32
+
+**-denorm-mode-fp32 &lt;[fp-denormal-mode](#fp-denormal-mode)&gt;**
+
+Control handling of 32-bit denormal floating point values in SPIR-V and DXIL (any, preserve, ftz) 
+
+
+<a id="denorm-mode-fp64"></a>
+### -denorm-mode-fp64
+
+**-denorm-mode-fp64 &lt;[fp-denormal-mode](#fp-denormal-mode)&gt;**
+
+Control handling of 64-bit denormal floating point values in SPIR-V (any, preserve, ftz) 
 
 
 <a id="g"></a>
@@ -441,6 +477,11 @@ Make data accessed through ConstantBuffer, ParameterBlock, StructuredBuffer, Byt
 <a id="fvk-use-dx-layout"></a>
 ### -fvk-use-dx-layout
 Pack members using FXCs member packing rules when targeting GLSL or SPIRV. 
+
+
+<a id="fvk-use-c-layout"></a>
+### -fvk-use-c-layout
+Make data accessed through ConstantBuffer, ParameterBlock, StructuredBuffer, ByteAddressBuffer and general pointers follow the C/C++ structure layout rules when targeting SPIRV. 
 
 
 <a id="fvk-b-shift"></a>
@@ -529,6 +570,45 @@ Allow generating code from incomplete libraries with unresolved external functio
 Specify the space index for the system defined global bindless resource array. 
 
 
+<a id="separate-debug-info"></a>
+### -separate-debug-info
+Emit debug data to a separate file, and strip it from the main output file. 
+
+
+<a id="emit-cpu-via-cpp"></a>
+### -emit-cpu-via-cpp
+Generate CPU targets using C++ (default) 
+
+
+<a id="emit-cpu-via-llvm"></a>
+### -emit-cpu-via-llvm
+Generate CPU targets using LLVM 
+
+
+<a id="llvm-target-triple"></a>
+### -llvm-target-triple
+
+**-llvm-target-triple &lt;target triple&gt;**
+
+Sets the target triple for the LLVM target, enabling cross compilation. The default value is the host platform. 
+
+
+<a id="llvm-cpu"></a>
+### -llvm-cpu
+
+**-llvm-cpu &lt;cpu name&gt;**
+
+Sets the target CPU for the LLVM target, enabling the extensions and features of that CPU. The default value is "generic". 
+
+
+<a id="llvm-features"></a>
+### -llvm-features
+
+**-llvm-features &lt;a1,+enable,-disable,...&gt;**
+
+Sets a comma-separates list of architecture-specific features for the LLVM targets. 
+
+
 
 <a id="Downstream"></a>
 ## Downstream
@@ -587,7 +667,7 @@ Dump the AST to a .slang-ast file next to the input.
 
 **-dump-intermediate-prefix &lt;prefix&gt;**
 
-File name prefix for [-dump-intermediates](#dump-intermediates) outputs, default is 'slang-dump-' 
+File name prefix for [-dump-intermediates](#dump-intermediates) outputs, default is no prefix 
 
 
 <a id="dump-intermediates"></a>
@@ -597,7 +677,7 @@ Dump intermediate outputs for debugging.
 
 <a id="dump-ir"></a>
 ### -dump-ir
-Dump the IR for debugging. 
+Dump the IR after every pass for debugging. 
 
 
 <a id="dump-ir-ids"></a>
@@ -622,7 +702,7 @@ Print the hierarchy of the processed source files.
 
 <a id="serial-ir"></a>
 ### -serial-ir
-Serialize the IR between front-end and back-end. 
+\[REMOVED\] Serialize the IR between front-end and back-end. 
 
 
 <a id="skip-codegen"></a>
@@ -632,7 +712,28 @@ Skip the code generation phase.
 
 <a id="validate-ir"></a>
 ### -validate-ir
-Validate the IR between the phases. 
+Validate the IR after select intermediate passes. 
+
+
+<a id="validate-ir-detailed"></a>
+### -validate-ir-detailed
+Perform debug validation on IR after each intermediate pass. 
+
+
+<a id="dump-ir-before"></a>
+### -dump-ir-before
+
+**-dump-ir-before &lt;pass-names&gt;**
+
+Dump IR before specified pass, may be specified more than once 
+
+
+<a id="dump-ir-after"></a>
+### -dump-ir-after
+
+**-dump-ir-after &lt;pass-names&gt;**
+
+Dump IR after specified pass, may be specified more than once 
 
 
 <a id="verbose-paths"></a>
@@ -650,9 +751,14 @@ Verify IR in the front-end.
 Disassemble and print the module IR. 
 
 
-<a id="separate-debug-info"></a>
-### -separate-debug-info
-Emit debug data to a separate file, and strip it from the main output file. 
+<a id="get-module-info"></a>
+### -get-module-info
+Print the name and version of a serialized IR Module 
+
+
+<a id="get-supported-module-versions"></a>
+### -get-supported-module-versions
+Print the minimum and maximum module versions this compiler supports 
 
 
 
@@ -772,6 +878,11 @@ Enable experimental dynamic dispatch features
 <a id="embed-downstream-ir"></a>
 ### -embed-downstream-ir
 Embed downstream IR into emitted slang IR 
+
+
+<a id="experimental-feature"></a>
+### -experimental-feature
+Enable experimental features (loading builtin neural module) 
 
 
 
@@ -962,6 +1073,15 @@ Floating Point Mode
 * `fast` : Allow optimizations that may change results of floating-point computations. Prefer the fastest version of special functions supported by the target. 
 * `default` : Default floating point mode 
 
+<a id="fp-denormal-mode"></a>
+## fp-denormal-mode
+
+Floating Point Denormal Handling Mode 
+
+* `any` : Use any denormal handling mode (default). The mode used is implementation defined. 
+* `preserve` : Preserve denormal values 
+* `ftz` : Flush denormals to zero 
+
 <a id="help-style"></a>
 ## help-style
 
@@ -1031,24 +1151,29 @@ Target
 * `spirv-asm`, `spirv-assembly` : SPIR-V assembly 
 * `c` : C source code 
 * `cpp`, `c++`, `cxx` : C++ source code 
+* `hpp` : C++ source header 
 * `torch`, `torch-binding`, `torch-cpp`, `torch-cpp-binding` : C++ for pytorch binding 
 * `host-cpp`, `host-c++`, `host-cxx` : C++ source for host execution 
 * `exe`, `executable` : Executable binary 
 * `shader-sharedlib`, `shader-sharedlibrary`, `shader-dll` : Shared library/Dll for shader kernel 
 * `sharedlib`, `sharedlibrary`, `dll` : Shared library/Dll for host execution 
 * `cuda`, `cu` : CUDA source code 
+* `cuh` : CUDA source header 
 * `ptx` : PTX assembly 
 * `cuobj`, `cubin` : CUDA binary 
 * `host-callable`, `callable` : Host callable 
-* `object-code` : Object code 
+* `object-code`, `shader-object-code` : Object code for host execution (shader style) 
 * `host-host-callable` : Host callable for host execution 
 * `metal` : Metal shader source 
 * `metallib` : Metal Library Bytecode 
-* `Metal Library Bytecode assembly` 
+* `metallib-asm` : Metal Library Bytecode assembly 
 * `wgsl` : WebGPU shading language source 
 * `wgsl-spirv-asm`, `wgsl-spirv-assembly` : SPIR-V assembly via WebGPU shading language 
 * `wgsl-spirv` : SPIR-V via WebGPU shading language 
 * `slangvm`, `slang-vm` : Slang VM byte code 
+* `host-object-code` : Object code for host execution (host style) 
+* `llvm-host-ir`, `llvm-ir` : LLVM IR assembly (host style) 
+* `llvm-shader-ir` : LLVM IR assembly (shader style) 
 
 <a id="stage"></a>
 ## stage
@@ -1068,7 +1193,7 @@ Stage
 * `miss` 
 * `callable` 
 * `mesh` 
-* `amplification` 
+* `amplification`, `task` 
 * `dispatch` 
 
 <a id="vulkan-shift"></a>
@@ -1087,7 +1212,6 @@ Vulkan Shift
 A capability describes an optional feature that a target may or may not support. When a [-capability](#capability-1) is specified, the compiler may assume that the target supports that capability, and generate code accordingly. 
 
 * `spirv_1_{ 0`, `1`, `2`, `3`, `4`, `5 }` : minimum supported SPIR - V version 
-* `Invalid` 
 * `textualTarget` 
 * `hlsl` 
 * `glsl` 
@@ -1098,6 +1222,7 @@ A capability describes an optional feature that a target may or may not support.
 * `spirv` 
 * `wgsl` 
 * `slangvm` 
+* `llvm` 
 * `glsl_spirv_1_0` 
 * `glsl_spirv_1_1` 
 * `glsl_spirv_1_2` 
@@ -1111,8 +1236,8 @@ A capability describes an optional feature that a target may or may not support.
 * `metallib_3_1` 
 * `hlsl_nvapi` 
 * `hlsl_2018` 
-* `hlsl_coopvec_poc` 
 * `optix_coopvec` 
+* `optix_multilevel_traversal` 
 * `vertex` 
 * `fragment` 
 * `compute` 
@@ -1133,6 +1258,8 @@ A capability describes an optional feature that a target may or may not support.
 * `SPV_KHR_quad_control` : enables the SPV_KHR_quad_control extension 
 * `SPV_KHR_fragment_shader_barycentric` : enables the SPV_KHR_fragment_shader_barycentric extension 
 * `SPV_KHR_non_semantic_info` : enables the SPV_KHR_non_semantic_info extension 
+* `SPV_KHR_device_group` : enables the SPV_KHR_device_group extension 
+* `SPV_KHR_variable_pointers` : enables the SPV_KHR_variable_pointers extension 
 * `SPV_KHR_ray_tracing` : enables the SPV_KHR_ray_tracing extension 
 * `SPV_KHR_ray_query` : enables the SPV_KHR_ray_query extension 
 * `SPV_KHR_ray_tracing_position_fetch` : enables the SPV_KHR_ray_tracing_position_fetch extension 
@@ -1152,6 +1279,8 @@ A capability describes an optional feature that a target may or may not support.
 * `SPV_KHR_cooperative_matrix` : enables the SPV_KHR_cooperative_matrix extension 
 * `SPV_NV_tensor_addressing` : enables the SPV_NV_tensor_addressing extension 
 * `SPV_NV_cooperative_matrix2` : enables the SPV_NV_cooperative_matrix2 extension 
+* `SPV_NV_bindless_texture` : enables the SPV_NV_bindless_texture extension 
+* `spvDeviceGroup` 
 * `spvAtomicFloat32AddEXT` 
 * `spvAtomicFloat16AddEXT` 
 * `spvAtomicFloat64AddEXT` 
@@ -1203,6 +1332,7 @@ A capability describes an optional feature that a target may or may not support.
 * `spvQuadControlKHR` 
 * `spvVulkanMemoryModelKHR` 
 * `spvVulkanMemoryModelDeviceScopeKHR` 
+* `spvBindlessTextureNV` 
 * `metallib_latest` 
 * `dxil_lib` 
 * `any_target` 
@@ -1210,14 +1340,23 @@ A capability describes an optional feature that a target may or may not support.
 * `any_gfx_target` 
 * `any_cpp_target` 
 * `cpp_cuda` 
+* `cpp_llvm` 
+* `cpp_cuda_llvm` 
 * `cpp_cuda_spirv` 
+* `cpp_cuda_spirv_llvm` 
+* `cpp_cuda_metal_spirv` 
 * `cuda_spirv` 
 * `cpp_cuda_glsl_spirv` 
 * `cpp_cuda_glsl_hlsl` 
+* `cpp_cuda_glsl_hlsl_llvm` 
 * `cpp_cuda_glsl_hlsl_spirv` 
+* `cpp_cuda_glsl_hlsl_spirv_llvm` 
 * `cpp_cuda_glsl_hlsl_spirv_wgsl` 
+* `cpp_cuda_glsl_hlsl_spirv_wgsl_llvm` 
 * `cpp_cuda_glsl_hlsl_metal_spirv` 
+* `cpp_cuda_glsl_hlsl_metal_spirv_llvm` 
 * `cpp_cuda_glsl_hlsl_metal_spirv_wgsl` 
+* `cpp_cuda_glsl_hlsl_metal_spirv_wgsl_llvm` 
 * `cpp_cuda_hlsl` 
 * `cpp_cuda_hlsl_spirv` 
 * `cpp_cuda_hlsl_metal_spirv` 
@@ -1230,12 +1369,14 @@ A capability describes an optional feature that a target may or may not support.
 * `cuda_glsl_hlsl` 
 * `cuda_hlsl_metal_spirv` 
 * `cuda_glsl_hlsl_spirv` 
+* `cuda_glsl_hlsl_spirv_llvm` 
 * `cuda_glsl_hlsl_spirv_wgsl` 
 * `cuda_glsl_hlsl_metal_spirv` 
 * `cuda_glsl_hlsl_metal_spirv_wgsl` 
 * `cuda_glsl_spirv` 
 * `cuda_glsl_metal_spirv` 
 * `cuda_glsl_metal_spirv_wgsl` 
+* `cuda_glsl_metal_spirv_wgsl_llvm` 
 * `cuda_hlsl` 
 * `cuda_hlsl_spirv` 
 * `glsl_hlsl_spirv` 
@@ -1254,6 +1395,7 @@ A capability describes an optional feature that a target may or may not support.
 * `GL_EXT_demote_to_helper_invocation` : enables the GL_EXT_demote_to_helper_invocation extension 
 * `GL_EXT_maximal_reconvergence` : enables the GL_EXT_maximal_reconvergence extension 
 * `GL_EXT_shader_quad_control` : enables the GL_EXT_shader_quad_control extension 
+* `GL_EXT_device_group` : enables the GL_EXT_device_group extension 
 * `GL_EXT_fragment_shader_barycentric` : enables the GL_EXT_fragment_shader_barycentric extension 
 * `GL_EXT_mesh_shader` : enables the GL_EXT_mesh_shader extension 
 * `GL_EXT_nonuniform_qualifier` : enables the GL_EXT_nonuniform_qualifier extension 
@@ -1308,6 +1450,7 @@ A capability describes an optional feature that a target may or may not support.
 * `GL_NV_shader_subgroup_partitioned` : enables the GL_NV_shader_subgroup_partitioned extension 
 * `GL_NV_shader_texture_footprint` : enables the GL_NV_shader_texture_footprint extension 
 * `GL_NV_cluster_acceleration_structure` : enables the GL_NV_cluster_acceleration_structure extension 
+* `GL_NV_cooperative_vector` : enables the GL_NV_cooperative_vector extension 
 * `nvapi` 
 * `raytracing` 
 * `ser` 
@@ -1327,6 +1470,7 @@ A capability describes an optional feature that a target may or may not support.
 * `cooperative_vector` 
 * `cooperative_vector_training` 
 * `cooperative_matrix` 
+* `cooperative_matrix_spirv` 
 * `cooperative_matrix_reduction` 
 * `cooperative_matrix_conversion` 
 * `cooperative_matrix_map_element` 
@@ -1346,6 +1490,7 @@ A capability describes an optional feature that a target may or may not support.
 * `callable` 
 * `miss` 
 * `mesh` 
+* `task` 
 * `amplification` 
 * `any_stage` 
 * `amplification_mesh` 
@@ -1454,6 +1599,7 @@ A capability describes an optional feature that a target may or may not support.
 * `consumestructuredbuffer` 
 * `structuredbuffer` 
 * `structuredbuffer_rw` 
+* `implicit_derivatives_sampling` 
 * `fragmentprocessing` 
 * `fragmentprocessing_derivativecontrol` 
 * `getattributeatvertex` 
@@ -1472,6 +1618,7 @@ A capability describes an optional feature that a target may or may not support.
 * `texture_querylod` 
 * `texture_querylevels` 
 * `texture_shadowlod` 
+* `texture_shadowgrad` 
 * `atomic_glsl_float1` 
 * `atomic_glsl_float2` 
 * `atomic_glsl_halfvec` 
@@ -1548,17 +1695,54 @@ A [&lt;language&gt;](#language), &lt;format&gt;, and/or [&lt;stage&gt;](#stage) 
 * `tesc` : glsl (hull) 
 * `tese` : glsl (domain) 
 * `comp` : glsl (compute) 
+* `mesh` : glsl (mesh) 
+* `task` : glsl (amplification) 
 * `slang` 
 * `spv` : SPIR-V 
 * `spv-asm` : SPIR-V assembly 
 * `c` 
 * `cpp`, `c++`, `cxx` : C++ 
+* `hpp` : C++ Header 
 * `exe` : executable 
 * `dll`, `so` : sharedlibrary/dll 
 * `cu` : CUDA 
+* `cuh` : CUDA Header 
 * `ptx` : PTX 
 * `obj`, `o` : object-code 
 * `zip` : container 
 * `slang-module`, `slang-library` : Slang Module/Library 
 * `dir` : Container as a directory 
+
+<a id="help-category"></a>
+## help-category
+
+Available help categories for the [-h](#h) option 
+
+* `General` : General options 
+* `Target` : Target code generation options 
+* `Downstream` : Downstream compiler options 
+* `Debugging` : Compiler debugging/instrumentation options 
+* `Repro` : Slang repro system related 
+* `Experimental` : Experimental options (use at your own risk) 
+* `Internal` : Internal-use options (use at your own risk) 
+* `Deprecated` : Deprecated options (allowed but ignored; may be removed in future) 
+* `compiler` : Downstream Compilers (aka Pass through) 
+* `language` : Language 
+* `language-version` : Language Version 
+* `archive-type` : Archive Type 
+* `line-directive-mode` : Line Directive Mode 
+* `debug-info-format` : Debug Info Format 
+* `fp-mode` : Floating Point Mode 
+* `fp-denormal-mode` : Floating Point Denormal Handling Mode 
+* `help-style` : Help Style 
+* `optimization-level` : Optimization Level 
+* `debug-level` : Debug Level 
+* `file-system-type` : File System Type 
+* `source-embed-style` : Source Embed Style 
+* `target` : Target 
+* `stage` : Stage 
+* `vulkan-shift` : Vulkan Shift 
+* `capability` : A capability describes an optional feature that a target may or may not support. When a [-capability](#capability-1) is specified, the compiler may assume that the target supports that capability, and generate code accordingly. 
+* `file-extension` : A [&lt;language&gt;](#language), &lt;format&gt;, and/or [&lt;stage&gt;](#stage) may be inferred from the extension of an input or [-o](#o) path 
+* `help-category` : Available help categories for the [-h](#h) option 
 
