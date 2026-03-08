@@ -150,3 +150,11 @@ endif()
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(CMAKE_INSTALL_INCLUDEDIR "include/Gtest" CACHE PATH "" FORCE)
 add_subdirectory(Source/Gtest)
+
+# Google Benchmark
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_ENABLE_INSTALL ON CACHE BOOL "" FORCE)
+set(BENCHMARK_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_INSTALL_TOOLS OFF CACHE BOOL "" FORCE)
+set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "" FORCE)
+add_subdirectory(Source/Benchmark)
