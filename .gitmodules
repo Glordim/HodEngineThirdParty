@@ -31,3 +31,6 @@
 [submodule "Source/Fmt"]
 	path = Source/Fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Source/Benchmark"]
+	path = Source/Benchmark
+	url = https://github.com/google/benchmark
