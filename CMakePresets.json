@@ -1,0 +1,149 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "win-x64",
+      "displayName": "Windows x64",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build/Win_x64",
+      "installDir": "${sourceDir}/Install/Win_x64",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      }
+    },
+    {
+      "name": "win-arm64",
+      "displayName": "Windows ARM64",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build/Win_arm64",
+      "installDir": "${sourceDir}/Install/Win_arm64",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      }
+    },
+    {
+      "name": "linux-x64",
+      "displayName": "Linux x64",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build/Linux_x64",
+      "installDir": "${sourceDir}/Install/Linux_x64",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "macos-arm64",
+      "displayName": "macOS ARM64",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build/MacOs_arm64",
+      "installDir": "${sourceDir}/Install/MacOs_arm64",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "android-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "$env{ANDROID_NDK}/build/cmake/android.toolchain.cmake",
+        "ANDROID_PLATFORM": "android-28"
+      }
+    },
+    {
+      "name": "android-arm64-v8a",
+      "displayName": "Android ARM64-v8a",
+      "inherits": "android-base",
+      "binaryDir": "${sourceDir}/Build/Android_arm64-v8a",
+      "installDir": "${sourceDir}/Install/Android_arm64-v8a",
+      "cacheVariables": {
+        "ANDROID_ABI": "arm64-v8a"
+      }
+    },
+    {
+      "name": "android-x86_64",
+      "displayName": "Android x86_64",
+      "inherits": "android-base",
+      "binaryDir": "${sourceDir}/Build/Android_x86_64",
+      "installDir": "${sourceDir}/Install/Android_x86_64",
+      "cacheVariables": {
+        "ANDROID_ABI": "x86_64"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "win-x64",         "configurePreset": "win-x64",   "jobs": 0 },
+    { "name": "win-x64-install", "configurePreset": "win-x64",   "targets": ["install"] },
+    { "name": "win-arm64",         "configurePreset": "win-arm64", "jobs": 0 },
+    { "name": "win-arm64-install", "configurePreset": "win-arm64", "targets": ["install"] },
+    { "name": "linux-x64",         "configurePreset": "linux-x64", "jobs": 0 },
+    { "name": "linux-x64-install", "configurePreset": "linux-x64", "targets": ["install"] },
+    { "name": "macos-arm64",                "configurePreset": "macos-arm64",      "jobs": 0 },
+    { "name": "macos-arm64-install",        "configurePreset": "macos-arm64",      "targets": ["install"] },
+    { "name": "android-arm64-v8a",          "configurePreset": "android-arm64-v8a","jobs": 0 },
+    { "name": "android-arm64-v8a-install",  "configurePreset": "android-arm64-v8a","targets": ["install"] },
+    { "name": "android-x86_64",             "configurePreset": "android-x86_64",  "jobs": 0 },
+    { "name": "android-x86_64-install",     "configurePreset": "android-x86_64",  "targets": ["install"] }
+  ],
+  "workflowPresets": [
+    {
+      "name": "win-x64",
+      "displayName": "Windows x64 — configure, build, install",
+      "steps": [
+        { "type": "configure", "name": "win-x64" },
+        { "type": "build",     "name": "win-x64" },
+        { "type": "build",     "name": "win-x64-install" }
+      ]
+    },
+    {
+      "name": "win-arm64",
+      "displayName": "Windows ARM64 — configure, build, install",
+      "steps": [
+        { "type": "configure", "name": "win-arm64" },
+        { "type": "build",     "name": "win-arm64" },
+        { "type": "build",     "name": "win-arm64-install" }
+      ]
+    },
+    {
+      "name": "linux-x64",
+      "displayName": "Linux x64 — configure, build, install",
+      "steps": [
+        { "type": "configure", "name": "linux-x64" },
+        { "type": "build",     "name": "linux-x64" },
+        { "type": "build",     "name": "linux-x64-install" }
+      ]
+    },
+    {
+      "name": "macos-arm64",
+      "displayName": "macOS ARM64 — configure, build, install",
+      "steps": [
+        { "type": "configure", "name": "macos-arm64" },
+        { "type": "build",     "name": "macos-arm64" },
+        { "type": "build",     "name": "macos-arm64-install" }
+      ]
+    },
+    {
+      "name": "android-arm64-v8a",
+      "displayName": "Android ARM64-v8a — configure, build, install",
+      "steps": [
+        { "type": "configure", "name": "android-arm64-v8a" },
+        { "type": "build",     "name": "android-arm64-v8a" },
+        { "type": "build",     "name": "android-arm64-v8a-install" }
+      ]
+    },
+    {
+      "name": "android-x86_64",
+      "displayName": "Android x86_64 — configure, build, install",
+      "steps": [
+        { "type": "configure", "name": "android-x86_64" },
+        { "type": "build",     "name": "android-x86_64" },
+        { "type": "build",     "name": "android-x86_64-install" }
+      ]
+    }
+  ]
+}
