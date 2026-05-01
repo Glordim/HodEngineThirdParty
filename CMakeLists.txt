@@ -1,142 +1,163 @@
 cmake_minimum_required(VERSION 3.25)
-
 project(HodEngineThirdParty)
-
 include(ExternalProject)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "" FORCE)
+set(COMMON_CMAKE_ARGS
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    -DCMAKE_C_COMPILER:FILEPATH=${CMAKE_C_COMPILER}
+    -DCMAKE_CXX_COMPILER:FILEPATH=${CMAKE_CXX_COMPILER}
+    -DCMAKE_MAKE_PROGRAM:FILEPATH=${CMAKE_MAKE_PROGRAM}
+)
 
-if(APPLE)
-	set(CMAKE_OSX_DEPLOYMENT_TARGET "14" CACHE STRING "" FORCE)
+if(CMAKE_TOOLCHAIN_FILE)
+    list(APPEND COMMON_CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_TOOLCHAIN_FILE})
 endif()
 
 if(ANDROID)
-	set(CMAKE_TOOLCHAIN_FILE "${CMAKE_TOOLCHAIN_FILE}" CACHE FILEPATH "" FORCE)
-	set(ANDROID_ABI "${ANDROID_ABI}" CACHE STRING "" FORCE)
-	set(ANDROID_PLATFORM "${ANDROID_PLATFORM}" CACHE STRING "" FORCE)
+    list(APPEND COMMON_CMAKE_ARGS
+        -DANDROID_ABI=${ANDROID_ABI}
+        -DANDROID_PLATFORM=${ANDROID_PLATFORM}
+    )
 endif()
 
-set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "" FORCE)
-set(CMAKE_INSTALL_LIBDIR "lib" CACHE PATH "" FORCE)
-set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "" FORCE)
+if(APPLE)
+    list(APPEND COMMON_CMAKE_ARGS -DCMAKE_OSX_DEPLOYMENT_TARGET=14)
+endif()
 
 # Box2d
-set(BOX2D_SAMPLES OFF CACHE BOOL "" FORCE)
-set(BOX2D_VALIDATE OFF CACHE BOOL "" FORCE)
-set(BOX2D_UNIT_TESTS OFF CACHE BOOL "" FORCE)
-set(BOX2D_AVX2 OFF CACHE BOOL "" FORCE) # TODO: crash on Android
-add_subdirectory(Source/Box2d)
-#PROJECT_IS_TOP_LEVEL in Box2d'CMakeLists block include copy
-install( 
-	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/Box2d/include/box2d"
-	DESTINATION include
+ExternalProject_Add(Box2d
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/Box2d"
+    CMAKE_ARGS
+        ${COMMON_CMAKE_ARGS}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Box2d
+        -DBOX2D_SAMPLES=OFF
+        -DBOX2D_VALIDATE=OFF
+        -DBOX2D_UNIT_TESTS=OFF
+        -DBOX2D_AVX2=OFF # TODO: crash on Android
 )
 
 # Freetype
-set(FT_DISABLE_BROTLI ON CACHE BOOL "" FORCE)
-set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
-set(FT_DISABLE_PNG ON CACHE BOOL "" FORCE)
-set(FT_DISABLE_BZIP2 ON CACHE BOOL "" FORCE)
-set(FT_DISABLE_ZLIB ON CACHE BOOL "" FORCE)
-add_subdirectory(Source/Freetype)
+ExternalProject_Add(Freetype
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/Freetype"
+    CMAKE_ARGS
+        ${COMMON_CMAKE_ARGS}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Freetype
+        -DFT_DISABLE_BROTLI=ON
+        -DFT_DISABLE_HARFBUZZ=ON
+        -DFT_DISABLE_PNG=ON
+        -DFT_DISABLE_BZIP2=ON
+        -DFT_DISABLE_ZLIB=ON
+)
 
-if (WIN32 OR ANDROID OR LINUX)
-	# VulkanMemoryAllocator
-	set(VMA_ENABLE_INSTALL ON CACHE BOOL "" FORCE)
-	set(VMA_BUILD_DOCUMENTATION OFF CACHE BOOL "" FORCE)
-	set(CMAKE_INSTALL_INCLUDEDIR "include/VulkanMemoryAllocator" CACHE PATH "" FORCE)
-	add_subdirectory(Source/VulkanMemoryAllocator)
+if(WIN32 OR ANDROID OR LINUX)
+    # VulkanMemoryAllocator
+    ExternalProject_Add(VulkanMemoryAllocator
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanMemoryAllocator"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanMemoryAllocator
+            -DVMA_ENABLE_INSTALL=ON
+            -DVMA_BUILD_DOCUMENTATION=OFF
+    )
 endif()
 
-if (NOT ANDROID)
-	# Slang
-	set(SLANG_ENABLE_SLANGD OFF CACHE BOOL "" FORCE)
-	set(SLANG_ENABLE_GFX OFF CACHE BOOL "" FORCE)
-	set(SLANG_ENABLE_SLANG_RHI OFF CACHE BOOL "" FORCE)
-	set(SLANG_ENABLE_SLANGI OFF CACHE BOOL "" FORCE)
-	set(SLANG_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-	set(SLANG_ENABLE_EXAMPLES OFF CACHE BOOL "" FORCE)
-	set(SLANG_ENABLE_REPLAYER OFF CACHE BOOL "" FORCE)
-	set(SLANG_SLANG_LLVM_FLAVOR DISABLE CACHE BOOL "" FORCE)
-	set(CMAKE_INSTALL_INCLUDEDIR "include/Slang" CACHE PATH "" FORCE)
-	add_subdirectory(Source/Slang)
+if(NOT ANDROID)
+    # Slang
+    ExternalProject_Add(Slang
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/Slang"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Slang
+            -DSLANG_ENABLE_SLANGD=OFF
+            -DSLANG_ENABLE_GFX=OFF
+            -DSLANG_ENABLE_SLANG_RHI=OFF
+            -DSLANG_ENABLE_SLANGI=OFF
+            -DSLANG_ENABLE_TESTS=OFF
+            -DSLANG_ENABLE_EXAMPLES=OFF
+            -DSLANG_ENABLE_REPLAYER=OFF
+            -DSLANG_SLANG_LLVM_FLAVOR=DISABLE
+    )
 endif()
 
 # Fmt
-set(FMT_INSTALL ON CACHE BOOL "" FORCE)
-set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "" FORCE)
-add_subdirectory(Source/Fmt)
-
-# Stb
-install(
-	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/Stb/"
-	DESTINATION include/Stb
-	FILES_MATCHING
-	PATTERN "*.h"
+ExternalProject_Add(Fmt
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/Fmt"
+    CMAKE_ARGS
+        ${COMMON_CMAKE_ARGS}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Fmt
+        -DFMT_INSTALL=ON
 )
-
-if (WIN32)
-	# WindowsHModular
-	install(
-		DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/WindowsHModular/include/win32"
-		DESTINATION include
-		FILES_MATCHING
-		PATTERN "*.h"
-	)
-endif()
-
-# PortableFileDialogs
-install(
-	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/PortableFileDialogs"
-	DESTINATION include
-	FILES_MATCHING
-	PATTERN "*.h"
-)
-
-if (APPLE)
-	ExternalProject_Add(
-		MetalCpp
-		URL https://developer.apple.com/metal/cpp/files/metal-cpp_macOS15.2_iOS18.2.zip
-		CONFIGURE_COMMAND ""
-		BUILD_COMMAND ""
-		INSTALL_COMMAND ""
-		SOURCE_DIR ${CMAKE_BINARY_DIR}/metal-cpp-src
-	)
-
-	ExternalProject_Get_Property(MetalCpp SOURCE_DIR)
-	message(STATUS "MetalCpp: ${SOURCE_DIR}")
-
-	install(
-		DIRECTORY ${SOURCE_DIR}/Metal
-		DESTINATION include
-		FILES_MATCHING
-		PATTERN "*.hpp"
-	)
-
-	install(
-		DIRECTORY ${SOURCE_DIR}/Foundation
-		DESTINATION include
-		FILES_MATCHING
-		PATTERN "*.hpp"
-	)
-
-	install(
-		DIRECTORY ${SOURCE_DIR}/QuartzCore
-		DESTINATION include
-		FILES_MATCHING
-		PATTERN "*.hpp"
-	)
-endif()
 
 # Gtest
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-set(CMAKE_INSTALL_INCLUDEDIR "include/Gtest" CACHE PATH "" FORCE)
-add_subdirectory(Source/Gtest)
+ExternalProject_Add(Gtest
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/Gtest"
+    CMAKE_ARGS
+        ${COMMON_CMAKE_ARGS}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Gtest
+        -Dgtest_force_shared_crt=ON
+)
 
-# Google Benchmark
-set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
-set(BENCHMARK_ENABLE_INSTALL ON CACHE BOOL "" FORCE)
-set(BENCHMARK_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
-set(BENCHMARK_INSTALL_TOOLS OFF CACHE BOOL "" FORCE)
-set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "" FORCE)
-add_subdirectory(Source/Benchmark)
+# Benchmark
+ExternalProject_Add(Benchmark
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/Benchmark"
+    CMAKE_ARGS
+        ${COMMON_CMAKE_ARGS}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Benchmark
+        -DBENCHMARK_ENABLE_TESTING=OFF
+        -DBENCHMARK_ENABLE_INSTALL=ON
+        -DBENCHMARK_INSTALL_DOCS=OFF
+        -DBENCHMARK_INSTALL_TOOLS=OFF
+)
+
+# Stb (header-only)
+install(
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/Stb/"
+    DESTINATION "Stb/include"
+    FILES_MATCHING PATTERN "*.h"
+)
+
+# PortableFileDialogs (header-only)
+install(
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/PortableFileDialogs/"
+    DESTINATION "PortableFileDialogs/include"
+    FILES_MATCHING PATTERN "*.h"
+)
+
+if(WIN32)
+    # WindowsHModular (header-only)
+    install(
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/WindowsHModular/include/win32"
+        DESTINATION "WindowsHModular/include"
+        FILES_MATCHING PATTERN "*.h"
+    )
+endif()
+
+if(APPLE)
+    # MetalCpp (downloaded at configure time)
+    ExternalProject_Add(MetalCpp
+        URL https://developer.apple.com/metal/cpp/files/metal-cpp_macOS15.2_iOS18.2.zip
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        SOURCE_DIR ${CMAKE_BINARY_DIR}/metal-cpp-src
+    )
+
+    ExternalProject_Get_Property(MetalCpp SOURCE_DIR)
+
+    install(
+        DIRECTORY ${SOURCE_DIR}/Metal
+        DESTINATION "MetalCpp/include"
+        FILES_MATCHING PATTERN "*.hpp"
+    )
+    install(
+        DIRECTORY ${SOURCE_DIR}/Foundation
+        DESTINATION "MetalCpp/include"
+        FILES_MATCHING PATTERN "*.hpp"
+    )
+    install(
+        DIRECTORY ${SOURCE_DIR}/QuartzCore
+        DESTINATION "MetalCpp/include"
+        FILES_MATCHING PATTERN "*.hpp"
+    )
+endif()
