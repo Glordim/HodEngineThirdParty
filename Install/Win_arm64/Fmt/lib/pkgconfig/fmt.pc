@@ -1,0 +1,11 @@
+prefix=E:/HodEngineThirdParty/Install/Win_arm64/Fmt
+exec_prefix=E:/HodEngineThirdParty/Install/Win_arm64/Fmt
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: fmt
+Description: A modern formatting library
+Version: 12.1.0
+Libs: -L${libdir} -lfmt
+Cflags: -I${includedir}
+
