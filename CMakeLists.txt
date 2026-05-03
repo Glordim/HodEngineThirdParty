@@ -62,6 +62,28 @@ if(WIN32 OR ANDROID OR LINUX)
     )
 endif()
 
+if(WIN32 OR LINUX)
+    # VulkanHeaders
+    ExternalProject_Add(VulkanHeaders
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanHeaders"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanHeaders
+            -DVULKAN_HEADERS_ENABLE_MODULE=OFF
+    )
+
+    # VulkanLoader
+    ExternalProject_Add(VulkanLoader
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanLoader"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanLoader
+            -DVULKAN_HEADERS_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/VulkanHeaders
+            -DBUILD_TESTS=OFF
+        DEPENDS VulkanHeaders
+    )
+endif()
+
 if(NOT ANDROID)
     # Slang
     ExternalProject_Add(Slang

@@ -28,3 +28,9 @@
 [submodule "Source/Benchmark"]
 	path = Source/Benchmark
 	url = https://github.com/google/benchmark
+[submodule "Source/VulkanLoader"]
+	path = Source/VulkanLoader
+	url = https://github.com/KhronosGroup/Vulkan-Loader
+[submodule "Source/VulkanHeaders"]
+	path = Source/VulkanHeaders
+	url = https://github.com/KhronosGroup/Vulkan-Headers
