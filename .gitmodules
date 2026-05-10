@@ -34,3 +34,15 @@
 [submodule "Source/VulkanHeaders"]
 	path = Source/VulkanHeaders
 	url = https://github.com/KhronosGroup/Vulkan-Headers
+[submodule "Source/VulkanValidationLayers"]
+	path = Source/VulkanValidationLayers
+	url = https://github.com/KhronosGroup/Vulkan-ValidationLayers
+[submodule "Source/SpirvHeaders"]
+	path = Source/SpirvHeaders
+	url = https://github.com/KhronosGroup/SPIRV-Headers
+[submodule "Source/SpirvTools"]
+	path = Source/SpirvTools
+	url = https://github.com/KhronosGroup/SPIRV-Tools
+[submodule "Source/VulkanUtilityLibraries"]
+	path = Source/VulkanUtilityLibraries
+	url = https://github.com/KhronosGroup/Vulkan-Utility-Libraries
