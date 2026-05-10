@@ -1,3 +1,5 @@
 SpirvHeaders
 SpirvTools
 VulkanUtilityLibraries
+VulkanHeaders/share/vulkan
+Slang/share
