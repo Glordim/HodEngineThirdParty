@@ -51,19 +51,7 @@ ExternalProject_Add(Freetype
         -DFT_DISABLE_ZLIB=ON
 )
 
-if(WIN32 OR ANDROID OR LINUX)
-    # VulkanMemoryAllocator
-    ExternalProject_Add(VulkanMemoryAllocator
-        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanMemoryAllocator"
-        CMAKE_ARGS
-            ${COMMON_CMAKE_ARGS}
-            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanMemoryAllocator
-            -DVMA_ENABLE_INSTALL=ON
-            -DVMA_BUILD_DOCUMENTATION=OFF
-    )
-endif()
-
-if(WIN32 OR LINUX)
+if(WIN32 OR LINUX OR ANDROID)
     # VulkanHeaders
     ExternalProject_Add(VulkanHeaders
         SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanHeaders"
@@ -73,7 +61,69 @@ if(WIN32 OR LINUX)
             -DVULKAN_HEADERS_ENABLE_MODULE=OFF
     )
 
-    # VulkanLoader
+    # VulkanMemoryAllocator
+    ExternalProject_Add(VulkanMemoryAllocator
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanMemoryAllocator"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanMemoryAllocator
+            -DVMA_ENABLE_INSTALL=ON
+            -DVMA_BUILD_DOCUMENTATION=OFF
+    )
+
+    # SpirvHeaders
+    ExternalProject_Add(SpirvHeaders
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/SpirvHeaders"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/SpirvHeaders
+            -DSPIRV_HEADERS_SKIP_EXAMPLES=ON
+            -DSPIRV_HEADERS_SKIP_TESTS=ON
+    )
+
+    # SpirvTools
+    ExternalProject_Add(SpirvTools
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/SpirvTools"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/SpirvTools
+            -DSPIRV-Headers_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/Source/SpirvHeaders
+            -DSPIRV_SKIP_TESTS=ON
+            -DSPIRV_SKIP_EXECUTABLES=ON
+        DEPENDS SpirvHeaders
+    )
+
+    # VulkanUtilityLibraries
+    ExternalProject_Add(VulkanUtilityLibraries
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanUtilityLibraries"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanUtilityLibraries
+            -DVULKAN_HEADERS_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/VulkanHeaders
+            -DBUILD_TESTS=OFF
+        DEPENDS VulkanHeaders
+    )
+
+    # VulkanValidationLayers
+    # UPDATE_DEPS=OFF: disable internal dep builder that misdetects Android x86_64 as 32-bit.
+    # All deps are provided via *_INSTALL_DIR / *_SOURCE_DIR variables.
+    ExternalProject_Add(VulkanValidationLayers
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanValidationLayers"
+        CMAKE_ARGS
+            ${COMMON_CMAKE_ARGS}
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/VulkanValidationLayers
+            -DBUILD_TESTS=OFF
+            -DBUILD_WERROR=OFF
+            -DUPDATE_DEPS=OFF
+            -DVULKAN_HEADERS_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/VulkanHeaders
+            -DSPIRV_HEADERS_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/SpirvHeaders
+            -DSPIRV_TOOLS_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/SpirvTools
+            -DVULKAN_UTILITY_LIBRARIES_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/VulkanUtilityLibraries
+        DEPENDS VulkanHeaders SpirvHeaders SpirvTools VulkanUtilityLibraries
+    )
+endif()
+if(WIN32 OR LINUX)
+	# VulkanLoader
     ExternalProject_Add(VulkanLoader
         SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/VulkanLoader"
         CMAKE_ARGS
