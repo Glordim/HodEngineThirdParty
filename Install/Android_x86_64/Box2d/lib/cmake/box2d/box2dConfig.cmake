@@ -58,6 +58,10 @@ endif()
 # Create imported target box2d::box2d
 add_library(box2d::box2d STATIC IMPORTED)
 
+set_target_properties(box2d::box2d PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+)
+
 # Load information for each installed configuration.
 file(GLOB _cmake_config_files "${CMAKE_CURRENT_LIST_DIR}/box2dConfig-*.cmake")
 foreach(_cmake_config_file IN LISTS _cmake_config_files)
