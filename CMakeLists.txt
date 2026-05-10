@@ -160,6 +160,8 @@ ExternalProject_Add(Fmt
         ${COMMON_CMAKE_ARGS}
         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/Fmt
         -DFMT_INSTALL=ON
+        -DFMT_TEST=OFF
+        -DFMT_DOC=OFF
 )
 
 # Gtest
