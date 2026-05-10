@@ -1,0 +1,12 @@
+prefix=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Benchmark
+exec_prefix=${prefix}
+libdir=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Benchmark/lib
+includedir=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Benchmark/include
+
+Name: benchmark
+Description: Google microbenchmark framework
+Version: 1.9.5
+
+Libs: -L${libdir} -lbenchmark
+Libs.private: -lpthread 
+Cflags: -I${includedir}
