@@ -52,7 +52,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_TOOLCHAIN_FILE": "$env{ANDROID_NDK}/build/cmake/android.toolchain.cmake",
-        "ANDROID_PLATFORM": "android-28"
+        "ANDROID_PLATFORM": "android-29"
       }
     },
     {
