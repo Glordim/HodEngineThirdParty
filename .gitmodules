@@ -1,48 +1,48 @@
-[submodule "Source/Box2d"]
-	path = Source/Box2d
+[submodule "source/Box2d"]
+	path = source/Box2d
 	url = https://github.com/erincatto/box2d.git
-[submodule "Source/Freetype"]
-	path = Source/Freetype
+[submodule "source/Freetype"]
+	path = source/Freetype
 	url = https://github.com/freetype/freetype.git
-[submodule "Source/Stb"]
-	path = Source/Stb
+[submodule "source/Stb"]
+	path = source/Stb
 	url = https://github.com/nothings/stb.git
-[submodule "Source/VulkanMemoryAllocator"]
-	path = Source/VulkanMemoryAllocator
+[submodule "source/VulkanMemoryAllocator"]
+	path = source/VulkanMemoryAllocator
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git
-[submodule "Source/PortableFileDialogs"]
-	path = Source/PortableFileDialogs
+[submodule "source/PortableFileDialogs"]
+	path = source/PortableFileDialogs
 	url = https://github.com/samhocevar/portable-file-dialogs.git
-[submodule "Source/Slang"]
-	path = Source/Slang
+[submodule "source/Slang"]
+	path = source/Slang
 	url = https://github.com/shader-slang/slang.git
-[submodule "Source/Gtest"]
-	path = Source/Gtest
+[submodule "source/Gtest"]
+	path = source/Gtest
 	url = https://github.com/google/googletest.git
-[submodule "Source/WindowsHModular"]
-	path = Source/WindowsHModular
+[submodule "source/WindowsHModular"]
+	path = source/WindowsHModular
 	url = https://github.com/Leandros/WindowsHModular.git
-[submodule "Source/Fmt"]
-	path = Source/Fmt
+[submodule "source/Fmt"]
+	path = source/Fmt
 	url = https://github.com/fmtlib/fmt.git
-[submodule "Source/Benchmark"]
-	path = Source/Benchmark
+[submodule "source/Benchmark"]
+	path = source/Benchmark
 	url = https://github.com/google/benchmark
-[submodule "Source/VulkanLoader"]
-	path = Source/VulkanLoader
+[submodule "source/VulkanLoader"]
+	path = source/VulkanLoader
 	url = https://github.com/KhronosGroup/Vulkan-Loader
-[submodule "Source/VulkanHeaders"]
-	path = Source/VulkanHeaders
+[submodule "source/VulkanHeaders"]
+	path = source/VulkanHeaders
 	url = https://github.com/KhronosGroup/Vulkan-Headers
-[submodule "Source/VulkanValidationLayers"]
-	path = Source/VulkanValidationLayers
+[submodule "source/VulkanValidationLayers"]
+	path = source/VulkanValidationLayers
 	url = https://github.com/KhronosGroup/Vulkan-ValidationLayers
-[submodule "Source/SpirvHeaders"]
-	path = Source/SpirvHeaders
+[submodule "source/SpirvHeaders"]
+	path = source/SpirvHeaders
 	url = https://github.com/KhronosGroup/SPIRV-Headers
-[submodule "Source/SpirvTools"]
-	path = Source/SpirvTools
+[submodule "source/SpirvTools"]
+	path = source/SpirvTools
 	url = https://github.com/KhronosGroup/SPIRV-Tools
-[submodule "Source/VulkanUtilityLibraries"]
-	path = Source/VulkanUtilityLibraries
+[submodule "source/VulkanUtilityLibraries"]
+	path = source/VulkanUtilityLibraries
 	url = https://github.com/KhronosGroup/Vulkan-Utility-Libraries
