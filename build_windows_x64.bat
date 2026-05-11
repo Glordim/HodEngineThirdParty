@@ -1,2 +1,2 @@
 call "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-cmake --workflow --preset win-x64
+cmake --workflow --preset windows-x64
