@@ -6,7 +6,7 @@
 			"displayName": "Windows x64",
 			"generator": "Ninja",
 			"binaryDir": "${sourceDir}/build/windows/x64",
-			"installDir": "${sourceDir}/install/windows/x64",
+			"installDir": "${sourceDir}/install/windows/AMD64",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release",
 				"CMAKE_C_COMPILER": "cl.exe",
@@ -18,7 +18,7 @@
 			"displayName": "Windows ARM64",
 			"generator": "Ninja",
 			"binaryDir": "${sourceDir}/build/windows/arm64",
-			"installDir": "${sourceDir}/install/windows/arm64",
+			"installDir": "${sourceDir}/install/windows/ARM64",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release",
 				"CMAKE_C_COMPILER": "cl.exe",
@@ -30,7 +30,7 @@
 			"displayName": "Linux x64",
 			"generator": "Ninja",
 			"binaryDir": "${sourceDir}/build/linux/x64",
-			"installDir": "${sourceDir}/install/linux/x64",
+			"installDir": "${sourceDir}/install/linux/x86_64",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release"
 			}
