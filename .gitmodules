@@ -46,3 +46,6 @@
 [submodule "source/VulkanUtilityLibraries"]
 	path = source/VulkanUtilityLibraries
 	url = https://github.com/KhronosGroup/Vulkan-Utility-Libraries
+[submodule "source/EnkiTS"]
+	path = source/EnkiTS
+	url = https://github.com/dougbinks/enkiTS.git
