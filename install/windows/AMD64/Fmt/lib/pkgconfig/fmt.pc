@@ -1,5 +1,5 @@
-prefix=E:/HodEngineThirdParty/Install/Win_x64/Fmt
-exec_prefix=E:/HodEngineThirdParty/Install/Win_x64/Fmt
+prefix=E:/HodEngineThirdParty/install/windows/AMD64/Fmt
+exec_prefix=E:/HodEngineThirdParty/install/windows/AMD64/Fmt
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 

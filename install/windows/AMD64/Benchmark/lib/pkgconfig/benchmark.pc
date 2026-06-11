@@ -1,7 +1,7 @@
-prefix=E:/HodEngineThirdParty/Install/Win_x64/Benchmark
+prefix=E:/HodEngineThirdParty/install/windows/AMD64/Benchmark
 exec_prefix=${prefix}
-libdir=E:/HodEngineThirdParty/Install/Win_x64/Benchmark/lib
-includedir=E:/HodEngineThirdParty/Install/Win_x64/Benchmark/include
+libdir=E:/HodEngineThirdParty/install/windows/AMD64/Benchmark/lib
+includedir=E:/HodEngineThirdParty/install/windows/AMD64/Benchmark/include
 
 Name: benchmark
 Description: Google microbenchmark framework

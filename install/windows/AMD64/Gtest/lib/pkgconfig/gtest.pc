@@ -1,5 +1,5 @@
-libdir=E:/HodEngineThirdParty/Install/Win_x64/Gtest/lib
-includedir=E:/HodEngineThirdParty/Install/Win_x64/Gtest/include
+libdir=E:/HodEngineThirdParty/install/windows/AMD64/Gtest/lib
+includedir=E:/HodEngineThirdParty/install/windows/AMD64/Gtest/include
 
 Name: gtest
 Description: GoogleTest (without main() function)

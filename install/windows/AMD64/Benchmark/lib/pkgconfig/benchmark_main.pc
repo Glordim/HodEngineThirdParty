@@ -1,4 +1,4 @@
-libdir=E:/HodEngineThirdParty/Install/Win_x64/Benchmark/lib
+libdir=E:/HodEngineThirdParty/install/windows/AMD64/Benchmark/lib
 
 Name: benchmark
 Description: Google microbenchmark framework (with main() function)

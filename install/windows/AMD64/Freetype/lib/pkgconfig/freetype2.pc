@@ -1,4 +1,4 @@
-prefix=E:/HodEngineThirdParty/Install/Win_x64/Freetype
+prefix=E:/HodEngineThirdParty/install/windows/AMD64/Freetype
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include
