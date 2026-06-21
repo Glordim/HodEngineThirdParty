@@ -19,7 +19,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_cmake_targets_defined "")
 set(_cmake_targets_not_defined "")
 set(_cmake_expected_targets "")
-foreach(_cmake_expected_target IN ITEMS box2d::box2d)
+foreach(_cmake_expected_target IN ITEMS enkiTS::enkiTS)
   list(APPEND _cmake_expected_targets "${_cmake_expected_target}")
   if(TARGET "${_cmake_expected_target}")
     list(APPEND _cmake_targets_defined "${_cmake_expected_target}")
@@ -55,11 +55,16 @@ if(_IMPORT_PREFIX STREQUAL "/")
   set(_IMPORT_PREFIX "")
 endif()
 
-# Create imported target box2d::box2d
-add_library(box2d::box2d STATIC IMPORTED)
+# Create imported target enkiTS::enkiTS
+add_library(enkiTS::enkiTS STATIC IMPORTED)
+
+set_target_properties(enkiTS::enkiTS PROPERTIES
+  INTERFACE_COMPILE_DEFINITIONS "ENKITS_TASK_PRIORITIES_NUM=3"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/enkiTS"
+)
 
 # Load information for each installed configuration.
-file(GLOB _cmake_config_files "${CMAKE_CURRENT_LIST_DIR}/box2dConfig-*.cmake")
+file(GLOB _cmake_config_files "${CMAKE_CURRENT_LIST_DIR}/enkiTSConfig-*.cmake")
 foreach(_cmake_config_file IN LISTS _cmake_config_files)
   include("${_cmake_config_file}")
 endforeach()

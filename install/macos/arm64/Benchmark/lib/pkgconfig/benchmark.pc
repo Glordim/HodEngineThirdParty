@@ -1,7 +1,7 @@
-prefix=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Benchmark
+prefix=/Users/anthony/Dev/HodEngineThirdParty/install/macos/arm64/Benchmark
 exec_prefix=${prefix}
-libdir=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Benchmark/lib
-includedir=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Benchmark/include
+libdir=/Users/anthony/Dev/HodEngineThirdParty/install/macos/arm64/Benchmark/lib
+includedir=/Users/anthony/Dev/HodEngineThirdParty/install/macos/arm64/Benchmark/include
 
 Name: benchmark
 Description: Google microbenchmark framework
