@@ -1,4 +1,4 @@
-prefix=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Freetype
+prefix=/Users/anthony/Dev/HodEngineThirdParty/install/macos/arm64/Freetype
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include

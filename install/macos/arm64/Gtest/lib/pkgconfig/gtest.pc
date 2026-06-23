@@ -1,5 +1,5 @@
-libdir=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Gtest/lib
-includedir=/Users/anthony/Dev/HodEngineThirdParty/Install/MacOs_arm64/Gtest/include
+libdir=/Users/anthony/Dev/HodEngineThirdParty/install/macos/arm64/Gtest/lib
+includedir=/Users/anthony/Dev/HodEngineThirdParty/install/macos/arm64/Gtest/include
 
 Name: gtest
 Description: GoogleTest (without main() function)
