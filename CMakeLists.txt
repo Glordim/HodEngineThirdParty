@@ -220,29 +220,19 @@ if(WIN32)
 endif()
 
 if(APPLE)
-	# MetalCpp (downloaded at configure time)
-	ExternalProject_Add(MetalCpp
-		URL https://developer.apple.com/metal/cpp/files/metal-cpp_macOS15.2_iOS18.2.zip
-		CONFIGURE_COMMAND ""
-		BUILD_COMMAND ""
-		INSTALL_COMMAND ""
-		SOURCE_DIR ${CMAKE_BINARY_DIR}/metal-cpp-src
-	)
-
-	ExternalProject_Get_Property(MetalCpp SOURCE_DIR)
-
+	# MetalCpp (header-only)
 	install(
-		DIRECTORY ${SOURCE_DIR}/Metal
+		DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/MetalCpp/Metal"
 		DESTINATION "MetalCpp/include"
 		FILES_MATCHING PATTERN "*.hpp"
 	)
 	install(
-		DIRECTORY ${SOURCE_DIR}/Foundation
+		DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/MetalCpp/Foundation"
 		DESTINATION "MetalCpp/include"
 		FILES_MATCHING PATTERN "*.hpp"
 	)
 	install(
-		DIRECTORY ${SOURCE_DIR}/QuartzCore
+		DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Source/MetalCpp/QuartzCore"
 		DESTINATION "MetalCpp/include"
 		FILES_MATCHING PATTERN "*.hpp"
 	)

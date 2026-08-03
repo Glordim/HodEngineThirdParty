@@ -55,3 +55,6 @@
 [submodule "source/zstd"]
 	path = source/zstd
 	url = https://github.com/facebook/zstd.git
+[submodule "source/MetalCpp"]
+	path = source/MetalCpp
+	url = https://github.com/apple/metal-cpp.git
