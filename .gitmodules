@@ -58,3 +58,6 @@
 [submodule "source/MetalCpp"]
 	path = source/MetalCpp
 	url = https://github.com/apple/metal-cpp.git
+[submodule "source/HarfBuzz"]
+	path = source/HarfBuzz
+	url = https://github.com/harfbuzz/harfbuzz

@@ -51,6 +51,26 @@ ExternalProject_Add(Freetype
 		-DFT_DISABLE_ZLIB=ON
 )
 
+# HarfBuzz
+ExternalProject_Add(HarfBuzz
+	SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source/HarfBuzz"
+	CMAKE_ARGS
+		${COMMON_CMAKE_ARGS}
+		-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/HarfBuzz
+		-DHB_HAVE_FREETYPE=OFF         # hb_ot_font reads the TTF itself
+		-DHB_HAVE_CORETEXT=OFF         # ON by default on Apple
+		-DHB_HAVE_UNISCRIBE=OFF
+		-DHB_HAVE_DIRECTWRITE=OFF
+		-DHB_HAVE_GDI=OFF
+		-DHB_HAVE_GLIB=OFF
+		-DHB_HAVE_GOBJECT=OFF
+		-DHB_HAVE_ICU=OFF              # HarfBuzz has its own Unicode data
+		-DHB_HAVE_GRAPHITE2=OFF
+		-DHB_HAVE_INTROSPECTION=OFF
+		-DHB_BUILD_UTILS=OFF           # hb-view/hb-shape, need cairo and glib
+		-DHB_BUILD_SUBSET=OFF           # harfbuzz-subset, may be for the cooker later ?
+)
+
 if(WIN32 OR LINUX OR ANDROID)
 	# VulkanHeaders
 	ExternalProject_Add(VulkanHeaders
