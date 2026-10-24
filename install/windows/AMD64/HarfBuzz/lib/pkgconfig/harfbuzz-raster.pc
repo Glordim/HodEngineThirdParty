@@ -1,0 +1,14 @@
+prefix=E:/HodEngineThirdParty/install/windows/AMD64/HarfBuzz
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: harfbuzz raster
+Description: HarfBuzz CPU rasterizer
+Version: 15.0.0
+
+Requires: harfbuzz = 15.0.0
+Requires.private: 
+Libs: -L${libdir} -lharfbuzz-raster
+Libs.private: -lm 
+Cflags: -I${includedir}/harfbuzz
